@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/bpmn2.0">
+  <process id="validationProcess" isExecutable="true">
+    <startEvent id="theStart" activiti:initiator="employeeName">
+      <extensionElements>
+        <activiti:formProperty id="validationDCGPApproved" name="validationDCGPApproved" type="boolean" variable="validationDCGPApproved" required="true"></activiti:formProperty>
+        <activiti:formProperty id="validationDGApproved" name="validationDGApproved" type="boolean" variable="validationDGApproved" required="true"></activiti:formProperty>
+        <activiti:formProperty id="validationDFIApproved" name="validationDFIApproved" type="boolean" variable="validationDFIApproved" required="true"></activiti:formProperty>
+      </extensionElements>
+    </startEvent>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <userTask id="validatinDCGP" name="Validation DCGP" activiti:candidateGroups="DCGP">
+      <extensionElements>
+        <activiti:formProperty id="choice" name="choice" type="boolean" variable="choice" required="true"></activiti:formProperty>
+        <activiti:taskListener event="complete" class="com.sofrecom.validation.WorkflowValidationDCGP"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="generateReport" name="Generate Report" activiti:candidateGroups="managment"></userTask>
+    <scriptTask id="scripttask1" name="Script Task" activiti:exclusive="false" scriptFormat="groovy" activiti:autoStoreVariables="false">
+      <script>println 'validation dcgp refused';</script>
+    </scriptTask>
+    <sequenceFlow id="flow69" sourceRef="exclusivegateway1" targetRef="scripttask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${validationDCGPApproved == false}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="terminateendevent4" name="TerminateEndEvent">
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flow70" sourceRef="scripttask1" targetRef="terminateendevent4"></sequenceFlow>
+    <endEvent id="terminateendevent6" name="TerminateEndEvent">
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flow74" sourceRef="theStart" targetRef="generateReport"></sequenceFlow>
+    <sequenceFlow id="flow79" sourceRef="validatinDCGP" targetRef="exclusivegateway1"></sequenceFlow>
+    <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
+    <sequenceFlow id="flow81" sourceRef="generateReport" targetRef="parallelgateway1"></sequenceFlow>
+    <sequenceFlow id="flow82" sourceRef="parallelgateway1" targetRef="validatinDCGP"></sequenceFlow>
+    <userTask id="validatinDFI" name="Validation DFI" activiti:candidateGroups="DFI">
+      <extensionElements>
+        <activiti:formProperty id="choice" name="choice" type="boolean" variable="choice" required="true"></activiti:formProperty>
+        <activiti:taskListener event="complete" class="com.sofrecom.validation.WorkflowValidationDFI"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow83" sourceRef="parallelgateway1" targetRef="validatinDFI"></sequenceFlow>
+    <sequenceFlow id="flow84" sourceRef="exclusivegateway1" targetRef="inclusivegateway1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${validationDCGPApproved == true}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow85" sourceRef="validatinDFI" targetRef="exclusivegateway2"></sequenceFlow>
+    <sequenceFlow id="flow86" sourceRef="exclusivegateway2" targetRef="inclusivegateway1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${validationDFIApproved == true}]]></conditionExpression>
+    </sequenceFlow>
+    <scriptTask id="scripttask2" name="Script Task" scriptFormat="groovy" activiti:autoStoreVariables="false">
+      <script>println 'validation dfi refused';</script>
+    </scriptTask>
+    <sequenceFlow id="flow87" sourceRef="exclusivegateway2" targetRef="scripttask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${validationDFIApproved == false}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="validatinFinal" name="Validation DG" activiti:candidateGroups="DG">
+      <extensionElements>
+        <activiti:formProperty id="choice" name="choice" type="boolean" variable="choice" required="true"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <endEvent id="terminateendevent7" name="TerminateEndEvent">
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flow90" sourceRef="scripttask2" targetRef="terminateendevent7"></sequenceFlow>
+    <sequenceFlow id="flow91" sourceRef="inclusivegateway1" targetRef="validatinFinal"></sequenceFlow>
+    <sequenceFlow id="flow92" sourceRef="validatinFinal" targetRef="terminateendevent6"></sequenceFlow>
+    <inclusiveGateway id="inclusivegateway1" name="Parallel Gateway"></inclusiveGateway>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_validationProcess">
+    <bpmndi:BPMNPlane bpmnElement="validationProcess" id="BPMNPlane_validationProcess">
+      <bpmndi:BPMNShape bpmnElement="theStart" id="BPMNShape_theStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="10.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="413.0" y="135.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="validatinDCGP" id="BPMNShape_validatinDCGP">
+        <omgdc:Bounds height="55.0" width="105.0" x="286.0" y="128.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="generateReport" id="BPMNShape_generateReport">
+        <omgdc:Bounds height="55.0" width="105.0" x="80.0" y="230.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="74.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent4" id="BPMNShape_terminateendevent4">
+        <omgdc:Bounds height="35.0" width="35.0" x="610.0" y="84.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent6" id="BPMNShape_terminateendevent6">
+        <omgdc:Bounds height="35.0" width="35.0" x="730.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="parallelgateway1" id="BPMNShape_parallelgateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="217.0" y="237.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="validatinDFI" id="BPMNShape_validatinDFI">
+        <omgdc:Bounds height="55.0" width="105.0" x="270.0" y="338.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="413.0" y="345.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="463.0" y="418.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="validatinFinal" id="BPMNShape_validatinFinal">
+        <omgdc:Bounds height="55.0" width="105.0" x="575.0" y="230.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent7" id="BPMNShape_terminateendevent7">
+        <omgdc:Bounds height="35.0" width="35.0" x="610.0" y="428.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inclusivegateway1" id="BPMNShape_inclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="490.0" y="237.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow69" id="BPMNEdge_flow69">
+        <omgdi:waypoint x="433.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="432.0" y="102.0"></omgdi:waypoint>
+        <omgdi:waypoint x="470.0" y="101.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow70" id="BPMNEdge_flow70">
+        <omgdi:waypoint x="575.0" y="101.0"></omgdi:waypoint>
+        <omgdi:waypoint x="610.0" y="101.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow74" id="BPMNEdge_flow74">
+        <omgdi:waypoint x="45.0" y="257.0"></omgdi:waypoint>
+        <omgdi:waypoint x="80.0" y="257.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow79" id="BPMNEdge_flow79">
+        <omgdi:waypoint x="391.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="413.0" y="155.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow81" id="BPMNEdge_flow81">
+        <omgdi:waypoint x="185.0" y="257.0"></omgdi:waypoint>
+        <omgdi:waypoint x="217.0" y="257.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow82" id="BPMNEdge_flow82">
+        <omgdi:waypoint x="237.0" y="237.0"></omgdi:waypoint>
+        <omgdi:waypoint x="237.0" y="156.0"></omgdi:waypoint>
+        <omgdi:waypoint x="286.0" y="155.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow83" id="BPMNEdge_flow83">
+        <omgdi:waypoint x="237.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="237.0" y="364.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="365.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow84" id="BPMNEdge_flow84">
+        <omgdi:waypoint x="453.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="509.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="237.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow85" id="BPMNEdge_flow85">
+        <omgdi:waypoint x="375.0" y="365.0"></omgdi:waypoint>
+        <omgdi:waypoint x="413.0" y="365.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow86" id="BPMNEdge_flow86">
+        <omgdi:waypoint x="453.0" y="365.0"></omgdi:waypoint>
+        <omgdi:waypoint x="509.0" y="364.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="277.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow87" id="BPMNEdge_flow87">
+        <omgdi:waypoint x="433.0" y="385.0"></omgdi:waypoint>
+        <omgdi:waypoint x="433.0" y="445.0"></omgdi:waypoint>
+        <omgdi:waypoint x="463.0" y="445.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow90" id="BPMNEdge_flow90">
+        <omgdi:waypoint x="568.0" y="445.0"></omgdi:waypoint>
+        <omgdi:waypoint x="610.0" y="445.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow91" id="BPMNEdge_flow91">
+        <omgdi:waypoint x="530.0" y="257.0"></omgdi:waypoint>
+        <omgdi:waypoint x="575.0" y="257.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow92" id="BPMNEdge_flow92">
+        <omgdi:waypoint x="680.0" y="257.0"></omgdi:waypoint>
+        <omgdi:waypoint x="730.0" y="257.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
