@@ -1,11 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2014 z.benrhouma.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.sofrecom;
 
@@ -30,20 +36,23 @@ public class WorkflowService {
     public final static org.slf4j.Logger logger = LoggerFactory.getLogger(WorkflowService.class);
 
     public static class ProcessGroupsMapping {
-        public static String GenerateReports = "managment";
-        public static String ValdationDFI = "DFI";
-        public static String ValidationDCGP = "DCGP";
-        public static String ValidationFinal = "DG";
+
+        public static String GENERATE_REPORTS = "managment";
+        public static String DFI_VALIDATION = "DFI";
+        public static String DCGP_VALIDATION = "DCGP";
+        public static String FINAL_VALDIATION = "DG";
     }
 
     public static class ProcessTaskMapping {
-        public static String generateReport = "generateReport";
-        public static String validatinDCGP = "validatinDCGP";
-        public static String validatinDFI = "validatinDFI";
-        public static String validatinFinal = "validatinFinal";
+
+        public static String GENERATE_REPORTS = "generateReport";
+        public static String DCGP_VALIDATION = "validatinDCGP";
+        public static String DFI_VALIDATION = "validatinDFI";
+        public static String FINAL_VALDIATION = "validatinFinal";
     }
 
     public static class ProcessVars {
+
         public static String DCGP_CHOICE = "validationDCGPApproved";
         public static String DFI_CHOICE = "validationDFIApproved";
         public static String DG_CHOICE = "validationDGApproved";
@@ -61,58 +70,62 @@ public class WorkflowService {
                 .buildProcessEngine();
     }
 
+    /**
+     * buid workflow engine and deploy the validation process
+     */
     public static void initWorkFlow() {
         initProcessEngine();
-        RepositoryService repositoryService = processEngine
+        final RepositoryService repositoryService = processEngine
                 .getRepositoryService();
         repositoryService.createDeployment()
                 .addClasspathResource("diagrams/validationProcess.bpmn").deploy();
     }
 
-    public static void startProcess(String processId) {
-        Map<String, Object> variables = new HashMap<String, Object>();
+    private static Map<String, Object> buildProcessVariables(final String processId) {
+        final Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("validationDCGPApproved", false);
         variables.put("validationDFIApproved", false);
         variables.put("validationDG", false);
         variables.put("reportId", processId);
-//      variables.put("vacationMotivation", "I'm really tired!");
-        RuntimeService runtimeService = processEngine.getRuntimeService();
-        ProcessInstanceQuery process = runtimeService.createProcessInstanceQuery().variableValueEquals("reportId", processId);
+        return variables;
+    }
 
+    public static void startProcess(String processId) {
+        final RuntimeService runtimeService = processEngine.getRuntimeService();
+        final ProcessInstanceQuery process = runtimeService.createProcessInstanceQuery().variableValueEquals("reportId", processId);
         if (process.count() == 0) {
             logger.info("creating new process instance:");
-            runtimeService.startProcessInstanceByKey("validationProcess", variables);
+            runtimeService.startProcessInstanceByKey("validationProcess", buildProcessVariables(processId));
         }
-
     }
 
-    public static void refresh() {
-
-    }
-
+    /**
+     * stop the process
+     */
     public static void stop() {
         processEngine.close();
     }
 
-    public static void generateReportss(String one) {
+    public static void generateReports(String one) {
         try {
-            TaskService taskService = processEngine.getTaskService();
-            List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup(ProcessGroupsMapping.GenerateReports).processVariableValueEquals("reportId", one).list();
+            final TaskService taskService = processEngine.getTaskService();
+            final List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup(ProcessGroupsMapping.GENERATE_REPORTS).processVariableValueEquals("reportId", one).list();
 
             if (tasks.size() > 0) {
                 taskService.claim(tasks.get(0).getId(), "zied");
                 taskService.complete(tasks.get(0).getId());
             }
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
+            throw new RuntimeException("workflow error during generating report task");
         } finally {
 
         }
     }
 
     static void terminate(String id) {
-        RuntimeService runtimeService = processEngine.getRuntimeService();
-        ProcessInstanceQuery process = runtimeService.createProcessInstanceQuery().variableValueEquals("reportId", id);
+        final RuntimeService runtimeService = processEngine.getRuntimeService();
+        final ProcessInstanceQuery process = runtimeService.createProcessInstanceQuery().variableValueEquals("reportId", id);
         if (process.count() > 0) {
             runtimeService.deleteProcessInstance(process.list().get(0).getId(), "nothing");
         }
@@ -122,12 +135,12 @@ public class WorkflowService {
     static void validateTask(String taskId, String group, String reportId, Boolean choice, String globaVariable, String localVariable) {
         logger.info("validation " + group);
         try {
-            TaskService taskService = processEngine.getTaskService();
-            List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup(group).taskDefinitionKey(taskId).processVariableValueEquals("reportId", reportId).list();
+            final TaskService taskService = processEngine.getTaskService();
+            final List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup(group).taskDefinitionKey(taskId).processVariableValueEquals("reportId", reportId).list();
             for (Task task : tasks) {
                 System.out.println(task.getName());
             }
-            Map<String, Object> variables = new HashMap<String, Object>();
+            final Map<String, Object> variables = new HashMap<String, Object>();
             variables.put(localVariable, choice);
             if (tasks.size() > 0) {
                 taskService.claim(tasks.get(0).getId(), "zied");
@@ -135,6 +148,7 @@ public class WorkflowService {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
+            throw new RuntimeException("error during validation task " + taskId);
         } finally {
 
         }
@@ -155,17 +169,14 @@ public class WorkflowService {
 
     static boolean isValidTaskForCurrentProcess(String taskId, String group, String reportVariable) {
         try {
-            TaskService taskService = processEngine.getTaskService();
-            List<Task> tasks = taskService.createTaskQuery().taskDefinitionKey(taskId).taskCandidateGroup(group).processVariableValueEquals("reportId", reportVariable).list();
-            for (Task task : tasks) {
-                System.out.println(task.getName());
-            }
-
+            final TaskService taskService = processEngine.getTaskService();
+            final List<Task> tasks = taskService.createTaskQuery().taskDefinitionKey(taskId).taskCandidateGroup(group).processVariableValueEquals("reportId", reportVariable).list();
             if (tasks.size() > 0) {
                 return true;
             }
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
+            throw new RuntimeException("error during validation task " + taskId);
         } finally {
 
         }

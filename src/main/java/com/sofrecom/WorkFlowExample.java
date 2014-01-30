@@ -1,11 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2014 z.benrhouma.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.sofrecom;
 
@@ -286,22 +292,22 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void refuseDGBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refuseDGBtnActionPerformed
-        WorkflowService.validateDGTask(WorkflowService.ProcessTaskMapping.validatinFinal, ProcessGroupsMapping.ValidationFinal, vartaibleTextField.getText(), false);
+        WorkflowService.validateDGTask(WorkflowService.ProcessTaskMapping.FINAL_VALDIATION, ProcessGroupsMapping.FINAL_VALDIATION, vartaibleTextField.getText(), false);
         refresh();
     }//GEN-LAST:event_refuseDGBtnActionPerformed
 
     private void validateDCGPBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validateDCGPBtnActionPerformed
-        WorkflowService.validateDCGPTask(WorkflowService.ProcessTaskMapping.validatinDCGP, ProcessGroupsMapping.ValidationDCGP, vartaibleTextField.getText(), true);
+        WorkflowService.validateDCGPTask(WorkflowService.ProcessTaskMapping.DCGP_VALIDATION, ProcessGroupsMapping.DCGP_VALIDATION, vartaibleTextField.getText(), true);
         refresh();
     }//GEN-LAST:event_validateDCGPBtnActionPerformed
 
     private void valDFIBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valDFIBtnActionPerformed
-        WorkflowService.validateDFITask(WorkflowService.ProcessTaskMapping.validatinDFI, ProcessGroupsMapping.ValdationDFI, vartaibleTextField.getText(), true);
+        WorkflowService.validateDFITask(WorkflowService.ProcessTaskMapping.DFI_VALIDATION, ProcessGroupsMapping.DFI_VALIDATION, vartaibleTextField.getText(), true);
         refresh();
     }//GEN-LAST:event_valDFIBtnActionPerformed
 
     private void valFinalBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valFinalBtnActionPerformed
-        WorkflowService.validateDGTask(WorkflowService.ProcessTaskMapping.validatinFinal, ProcessGroupsMapping.ValidationFinal, vartaibleTextField.getText(), true);
+        WorkflowService.validateDGTask(WorkflowService.ProcessTaskMapping.FINAL_VALDIATION, ProcessGroupsMapping.FINAL_VALDIATION, vartaibleTextField.getText(), true);
         refresh();
     }//GEN-LAST:event_valFinalBtnActionPerformed
 
@@ -311,17 +317,17 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_vartaibleTextFieldCaretUpdate
 
     private void genReportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genReportBtnActionPerformed
-        WorkflowService.generateReportss(vartaibleTextField.getText());
+        WorkflowService.generateReports(vartaibleTextField.getText());
         refresh();
     }//GEN-LAST:event_genReportBtnActionPerformed
 
     private void refuseDFIBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refuseDFIBtnActionPerformed
-        WorkflowService.validateDFITask(WorkflowService.ProcessTaskMapping.validatinDFI, ProcessGroupsMapping.ValdationDFI, vartaibleTextField.getText(), false);
+        WorkflowService.validateDFITask(WorkflowService.ProcessTaskMapping.DFI_VALIDATION, ProcessGroupsMapping.DFI_VALIDATION, vartaibleTextField.getText(), false);
         refresh();
     }//GEN-LAST:event_refuseDFIBtnActionPerformed
 
     private void refuseDCGPBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refuseDCGPBtnActionPerformed
-        WorkflowService.validateDCGPTask(WorkflowService.ProcessTaskMapping.validatinDCGP, ProcessGroupsMapping.ValidationDCGP, vartaibleTextField.getText(), false);
+        WorkflowService.validateDCGPTask(WorkflowService.ProcessTaskMapping.DCGP_VALIDATION, ProcessGroupsMapping.DCGP_VALIDATION, vartaibleTextField.getText(), false);
         refresh();
     }//GEN-LAST:event_refuseDCGPBtnActionPerformed
 
@@ -357,7 +363,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     }
 
     private void refreshGenerateReports() {
-        if (WorkflowService.isValidTaskForCurrentProcess(WorkflowService.ProcessTaskMapping.generateReport, WorkflowService.ProcessGroupsMapping.GenerateReports, vartaibleTextField.getText())) {
+        if (WorkflowService.isValidTaskForCurrentProcess(WorkflowService.ProcessTaskMapping.GENERATE_REPORTS, WorkflowService.ProcessGroupsMapping.GENERATE_REPORTS, vartaibleTextField.getText())) {
             genReportBtn.setEnabled(true);
 
         } else {
@@ -366,7 +372,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     }
 
     private void refreshValidationDCGP() {
-        if (WorkflowService.isValidTaskForCurrentProcess(WorkflowService.ProcessTaskMapping.validatinDCGP, WorkflowService.ProcessGroupsMapping.ValidationDCGP, vartaibleTextField.getText())) {
+        if (WorkflowService.isValidTaskForCurrentProcess(WorkflowService.ProcessTaskMapping.DCGP_VALIDATION, WorkflowService.ProcessGroupsMapping.DCGP_VALIDATION, vartaibleTextField.getText())) {
             validateDCGPBtn.setEnabled(true);
             refuseDCGPBtn.setEnabled(true);
         } else {
@@ -378,7 +384,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     }
 
     private void refreshValidationDFI() {
-        if (WorkflowService.isValidTaskForCurrentProcess(WorkflowService.ProcessTaskMapping.validatinDFI, WorkflowService.ProcessGroupsMapping.ValdationDFI, vartaibleTextField.getText())) {
+        if (WorkflowService.isValidTaskForCurrentProcess(WorkflowService.ProcessTaskMapping.DFI_VALIDATION, WorkflowService.ProcessGroupsMapping.DFI_VALIDATION, vartaibleTextField.getText())) {
             valDFIBtn.setEnabled(true);
             refuseDFIBtn.setEnabled(true);
 
@@ -391,7 +397,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     }
 
     private void refreshValidationFinale() {
-        if (WorkflowService.isValidTaskForCurrentProcess(WorkflowService.ProcessTaskMapping.validatinFinal, WorkflowService.ProcessGroupsMapping.ValidationFinal, vartaibleTextField.getText())) {
+        if (WorkflowService.isValidTaskForCurrentProcess(WorkflowService.ProcessTaskMapping.FINAL_VALDIATION, WorkflowService.ProcessGroupsMapping.FINAL_VALDIATION, vartaibleTextField.getText())) {
             valFinalBtn.setEnabled(true);
             refuseDGBtn.setEnabled(true);
 
