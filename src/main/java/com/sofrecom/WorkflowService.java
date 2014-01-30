@@ -60,25 +60,31 @@ public class WorkflowService {
 
     static ProcessEngine processEngine;
 
-    private static void initProcessEngine() {
-        processEngine = ProcessEngineConfiguration
+    private static Boolean initProcessEngineIsDone() {
+        if(processEngine == null){
+            processEngine = ProcessEngineConfiguration
                 .createStandaloneInMemProcessEngineConfiguration()
                 .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE)
                 //.setJdbcUrl("jdbc:mysql://localhost:3306/workflow").setJdbcUsername("root").setJdbcDriver("com.mysql.jdbc.Driver").setJdbcPassword("root")
                 .setJobExecutorActivate(true)
                 .setDatabaseSchemaUpdate("drop-create")
                 .buildProcessEngine();
+            return true;
+        }
+        return false;
     }
 
     /**
      * buid workflow engine and deploy the validation process
      */
     public static void initWorkFlow() {
-        initProcessEngine();
-        final RepositoryService repositoryService = processEngine
-                .getRepositoryService();
-        repositoryService.createDeployment()
-                .addClasspathResource("diagrams/validationProcess.bpmn").deploy();
+        if(initProcessEngineIsDone())
+        {
+            final RepositoryService repositoryService = processEngine
+                    .getRepositoryService();
+            repositoryService.createDeployment()
+                    .addClasspathResource("diagrams/validationProcess.bpmn").deploy();
+        }
     }
 
     private static Map<String, Object> buildProcessVariables(final String processId) {

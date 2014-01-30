@@ -52,7 +52,7 @@ public class WorkflowDiagram extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel1.setIcon(imageIcon);
         getContentPane().add(jLabel1);

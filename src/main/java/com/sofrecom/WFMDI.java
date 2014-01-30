@@ -45,6 +45,8 @@ public class WFMDI extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
+        workFlowExample1 = new com.sofrecom.WorkFlowExample();
+        workflowDiagram1 = new com.sofrecom.WorkflowDiagram();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -61,6 +63,14 @@ public class WFMDI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         desktopPane.setAutoscrolls(true);
+
+        workFlowExample1.setVisible(true);
+        desktopPane.add(workFlowExample1);
+        workFlowExample1.setBounds(10, 70, 666, 540);
+
+        workflowDiagram1.setVisible(true);
+        desktopPane.add(workflowDiagram1);
+        workflowDiagram1.setBounds(690, 70, 810, 540);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -126,7 +136,9 @@ public class WFMDI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1260, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1658, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,6 +196,8 @@ public class WFMDI extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
+    private com.sofrecom.WorkFlowExample workFlowExample1;
+    private com.sofrecom.WorkflowDiagram workflowDiagram1;
     // End of variables declaration//GEN-END:variables
 
 }

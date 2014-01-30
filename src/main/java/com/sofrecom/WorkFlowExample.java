@@ -26,7 +26,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
 
     public WorkFlowExample() {
         initComponents();
-        WorkflowService.initWorkFlow();
+
     }
 
     /**
@@ -298,6 +298,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        WorkflowService.initWorkFlow();
         WorkflowService.startProcess(vartaibleTextField.getText());
         refresh();
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -345,7 +346,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         WorkflowDiagram example = new WorkflowDiagram();
         this.getParent().add(example);
-        example.setVisible(true);     
+        example.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
