@@ -16,6 +16,7 @@
 package com.sofrecom;
 
 import com.sofrecom.WorkflowService.ProcessGroupsMapping;
+import java.awt.Container;
 
 /**
  *
@@ -23,12 +24,11 @@ import com.sofrecom.WorkflowService.ProcessGroupsMapping;
  */
 public class WorkFlowExample extends javax.swing.JInternalFrame {
 
-    
     public WorkFlowExample() {
         initComponents();
         WorkflowService.initWorkFlow();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,6 +56,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
         genReportBtn = new javax.swing.JButton();
         refuseDFIBtn = new javax.swing.JButton();
         refuseDCGPBtn = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
@@ -170,6 +171,13 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton5.setText("Workfow diagram");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -186,8 +194,10 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
                         .addGap(45, 45, 45)
                         .addComponent(vartaibleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton4)
+                        .addGap(112, 112, 112)
+                        .addComponent(jButton5)))
+                .addContainerGap(340, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(184, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,7 +229,8 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(vartaibleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton4))
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
                 .addGap(35, 35, 35)
                 .addComponent(refuseDCGPBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -331,11 +342,18 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
         refresh();
     }//GEN-LAST:event_refuseDCGPBtnActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        WorkflowDiagram example = new WorkflowDiagram();
+        this.getParent().add(example);
+        example.setVisible(true);     
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup choice;
     private javax.swing.JButton genReportBtn;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -354,7 +372,7 @@ public class WorkFlowExample extends javax.swing.JInternalFrame {
     private javax.swing.JButton validateDCGPBtn;
     private javax.swing.JTextField vartaibleTextField;
     // End of variables declaration//GEN-END:variables
-    
+
     private void refresh() {
         refreshGenerateReports();
         refreshValidationDCGP();

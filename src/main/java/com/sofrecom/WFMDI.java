@@ -165,6 +165,10 @@ public class WFMDI extends javax.swing.JFrame {
             logger.error(ex.getMessage());
         }
     }
+    
+    public javax.swing.JDesktopPane getDesktopPane(){
+        return desktopPane;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
