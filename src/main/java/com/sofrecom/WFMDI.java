@@ -26,13 +26,14 @@ import org.slf4j.LoggerFactory;
  */
 public class WFMDI extends javax.swing.JFrame {
 
-    
     public final static org.slf4j.Logger logger = LoggerFactory.getLogger(WFMDI.class);
+
     /**
      * Creates new form WFMDI
      */
     public WFMDI() {
         initComponents();
+        showDiagramInternalFrame();
     }
 
     /**
@@ -45,8 +46,7 @@ public class WFMDI extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
-        workFlowExample1 = new com.sofrecom.WorkFlowExample();
-        workflowDiagram1 = new com.sofrecom.WorkflowDiagram();
+        workFlowExampleInstance = new com.sofrecom.WorkFlowExample();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -64,13 +64,9 @@ public class WFMDI extends javax.swing.JFrame {
 
         desktopPane.setAutoscrolls(true);
 
-        workFlowExample1.setVisible(true);
-        desktopPane.add(workFlowExample1);
-        workFlowExample1.setBounds(10, 70, 666, 540);
-
-        workflowDiagram1.setVisible(true);
-        desktopPane.add(workflowDiagram1);
-        workflowDiagram1.setBounds(690, 70, 810, 540);
+        workFlowExampleInstance.setVisible(true);
+        desktopPane.add(workFlowExampleInstance);
+        workFlowExampleInstance.setBounds(10, 70, 666, 540);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -162,7 +158,7 @@ public class WFMDI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-         try {
+        try {
             JFrame.setDefaultLookAndFeelDecorated(true);
             javax.swing.UIManager.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
 
@@ -177,8 +173,8 @@ public class WFMDI extends javax.swing.JFrame {
             logger.error(ex.getMessage());
         }
     }
-    
-    public javax.swing.JDesktopPane getDesktopPane(){
+
+    public javax.swing.JDesktopPane getDesktopPane() {
         return desktopPane;
     }
 
@@ -196,8 +192,17 @@ public class WFMDI extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
-    private com.sofrecom.WorkFlowExample workFlowExample1;
-    private com.sofrecom.WorkflowDiagram workflowDiagram1;
+    private com.sofrecom.WorkFlowExample workFlowExampleInstance;
     // End of variables declaration//GEN-END:variables
+
+    private void showDiagramInternalFrame() {
+        WorkflowDiagram workflowDiagram = new WorkflowDiagram();
+        workflowDiagram.setLocation(
+                workFlowExampleInstance.getX() + workFlowExampleInstance.getWidth() + 15,
+                workFlowExampleInstance.getY()
+        );
+        this.desktopPane.add(workflowDiagram);
+        workflowDiagram.setVisible(true);
+    }
 
 }

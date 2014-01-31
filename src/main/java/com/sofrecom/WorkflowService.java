@@ -25,6 +25,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
+import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -93,6 +94,7 @@ public class WorkflowService {
         variables.put("validationDFIApproved", false);
         variables.put("validationDG", false);
         variables.put("reportId", processId);
+        variables.put("creationDate", DateTime.now().toDate().getTime());
         return variables;
     }
 
