@@ -29,13 +29,13 @@ import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author z.benrhouma
  */
 public class WorkflowService {
 
-    public final static org.slf4j.Logger logger = LoggerFactory.getLogger(WorkflowService.class);
-
+    private final static org.slf4j.Logger logger = LoggerFactory.getLogger(WorkflowService.class);
+    private static ProcessEngine processEngine;
+    
     public static class ProcessGroupsMapping {
 
         public static String GENERATE_REPORTS = "managment";
@@ -58,8 +58,6 @@ public class WorkflowService {
         public static String DFI_CHOICE = "validationDFIApproved";
         public static String DG_CHOICE = "validationDGApproved";
     }
-
-    static ProcessEngine processEngine;
 
     private static Boolean initProcessEngineIsDone() {
         if(processEngine == null){
@@ -107,13 +105,6 @@ public class WorkflowService {
         }
     }
 
-    /**
-     * stop the process
-     */
-    public static void stop() {
-        processEngine.close();
-    }
-
     public static void generateReports(String one) {
         try {
             final TaskService taskService = processEngine.getTaskService();
@@ -126,19 +117,9 @@ public class WorkflowService {
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException("workflow error during generating report task");
-        } finally {
-
         }
     }
 
-    static void terminate(String id) {
-        final RuntimeService runtimeService = processEngine.getRuntimeService();
-        final ProcessInstanceQuery process = runtimeService.createProcessInstanceQuery().variableValueEquals("reportId", id);
-        if (process.count() > 0) {
-            runtimeService.deleteProcessInstance(process.list().get(0).getId(), "nothing");
-        }
-
-    }
 
     static void validateTask(String taskId, String group, String reportId, Boolean choice, String globaVariable, String localVariable) {
         logger.info("validation " + group);
@@ -157,8 +138,6 @@ public class WorkflowService {
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException("error during validation task " + taskId);
-        } finally {
-
         }
         logger.info("terminate validation" + group);
     }
@@ -185,10 +164,8 @@ public class WorkflowService {
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException("error during validation task " + taskId);
-        } finally {
-
         }
         return false;
     }
-
+ 
 }

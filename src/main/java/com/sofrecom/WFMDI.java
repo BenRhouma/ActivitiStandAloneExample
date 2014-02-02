@@ -66,7 +66,7 @@ public class WFMDI extends javax.swing.JFrame {
 
         workFlowExampleInstance.setVisible(true);
         desktopPane.add(workFlowExampleInstance);
-        workFlowExampleInstance.setBounds(10, 70, 666, 540);
+        workFlowExampleInstance.setBounds(10, 20, 666, 540);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -132,9 +132,7 @@ public class WFMDI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1658, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1319, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
